@@ -12,14 +12,15 @@ This repository includes source codes for learning and evaluating medical concep
 We use [GloVe](https://nlp.stanford.edu/pubs/glove.pdf) and [node2vec](https://snap.stanford.edu/node2vec/) for learning medical concept embeddings.
 
 #### Learning Medical Concept Embedding using GloVe
-1. Install Python 3.5.2 and packages in the requirements.txt.
-2. Prepare dataset.
+1. Install Python 3.5.2 and all packages in the requirements.txt.
+2. Prepare dataset. GloVe takes a list of patient visits, where each visit of a patient contains multiple medical concepts, as an input. For example, [["concept A", "concept B"], ["Concept A", "Concept C", "Concept D"], ...]. No need to deliminate different patients since GloVe calculates co-occurrence based on a single visit. Concepts do not need to be encoded as integer. The GloVe package automatically encodes all existing unique codes in the training data and will output a mapping dictionary between concepts and corresponding integer codes (concept2id).
 3. Start training by using GloVe.py in /src. 
 
 #### Learning Medical Concept Embedding using node2vec
 1. Install Python 3.5.2 and clone the [node2vec repository](https://github.com/aditya-grover/node2vec).
-2. Prepare dataset.
-3. Third item
+2. Prepare dataset. node2vec takes a list of relationships between concepts as an input. Two concepts in a relationship must be deliminated by a space and different relationships must be deliminated by a linebreak. An example input format is provided at /emb in the node2vec repository above. Concepts do not need to be encoded as integer as long as there is no spaces used in concept name. 
+3. Start training by using node2vec package.
+
 
 ### Evaluating Learned Medical Concept Embeddings
 We evaluate learned embeddings based on the phenotypes from [PheKB](https://www.phekb.org/).
