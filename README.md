@@ -25,9 +25,10 @@ We use [GloVe](https://nlp.stanford.edu/pubs/glove.pdf) and [node2vec](https://s
 ### Evaluating Learned Medical Concept Embeddings
 We evaluate learned embeddings based on the phenotypes from [PheKB](https://www.phekb.org/). Condition (i.e. diagnosis) concepts included in 33 phenotypes were provided in /data/concepts_phenotypes.pkl as a pickle file. All concepts were converted to [OMOP CDM](https://www.ohdsi.org/data-standardization/the-common-data-model/). 
 
-1. Prepare learned MCEs to be evaluated. 
-2. Start evaluating by using evaluation.py.
+1. Prepare learned MCEs to be evaluated.
+2. Prepare a json file that contains settings. This json file should include information about the locations of MCEs, directories, and hyperparameters. An example format of the json file is provided at /data.
+3. Start evaluating by using evaluation.py.
 
 
 ### Acknowledgement
-The data contains protected health information (PHI) have been removed from all publicly available materials.
+The data containing protected health information (PHI) have been removed from all publicly available materials.
