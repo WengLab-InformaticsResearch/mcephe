@@ -159,10 +159,10 @@ class EvaluateMCE(object):
         self.simmat_dict["graphemb_simmat_dict"] = graphemb_simmat_dict
         self.simmat_dict["graphembplus_simmat_dict"] = graphembplus_simmat_dict
 
-    def computePrecision(self):
+    def computePrecision(self, k, mode):
         pass
 
-    def computeRecall(self):
+    def computeRecall(self, k, mode):
         pass
         
     def saveResults(self):
@@ -195,7 +195,4 @@ def build_newdict(concept_list):
     for i in range(len(concept_list)):
         mydict[concept_list[i]] = i
     return mydict
-
-
-
 
