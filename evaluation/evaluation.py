@@ -34,11 +34,9 @@ class EvaluateMCE(object):
 
         self.glove_concept2id = OrderedDict()
         self.glove_emb_matrix = OrderedDict()
-        
-        self.n2v_recall = OrderedDict()
-        self.glove_recall = OrderedDict()
-        self.n2v_precision = OrderedDict()
-        self.glove_precision = OrderedDict()
+
+        self.precision = dict()
+        self.recall = dict()
 
     def _loadGloveModel(self):
         print("load MCEs trained by GloVe...")
@@ -160,13 +158,115 @@ class EvaluateMCE(object):
         self.simmat_dict["graphembplus_simmat_dict"] = graphembplus_simmat_dict
 
     def computePrecision(self, k, mode):
-        pass
+        unique_phenotype = list(self.concept_phe.keys())
+        graphemb_precision = OrderedDict()
+        graphembplus_precision = OrderedDict()
+        fiveyearemb_precision = OrderedDict()
+        visitemb_precision = OrderedDict()
+
+        print("Compute precision for graphemb...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.graphemb_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_precision = compute_precision(candidate_concepts, k, self.similarity_matrix["graphemb_simmat"], 
+                                      self.simmat_dict["graphemb_simmat_dict"], mode)
+            else:
+                avg_precision = "NA"
+            graphemb_precision.update({phenotype : avg_precision})
+
+        print("Compute precision for graphembplus...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.graphembplus_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_precision = compute_precision(candidate_concepts, k, self.similarity_matrix["graphembplus_simmat"], 
+                                      self.simmat_dict["graphembplus_simmat_dict"], mode)
+            else:
+                avg_precision = "NA"
+            graphembplus_precision.update({phenotype : avg_precision})
+
+        print("Compute precision for fiveyearemb...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.fiveyearemb_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_precision = compute_precision(candidate_concepts, k, self.similarity_matrix["fiveyearemb_simmat"], 
+                                      self.simmat_dict["fiveyearemb_simmat_dict"], mode)
+            else:
+                avg_precision = "NA"
+            fiveyearemb_precision.update({phenotype : avg_precision})
+
+        print("Compute precision for visitemb...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.visitemb_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_precision = compute_precision(candidate_concepts, k, self.similarity_matrix["visitemb_simmat"], 
+                                      self.simmat_dict["visitemb_simmat_dict"], mode)
+            else:
+                avg_precision = "NA"
+            visitemb_precision.update({phenotype : avg_precision})
+        
+        self.precision["graphemb_precision"] = graphemb_precision
+        self.precision["graphembplus_precision"] = graphembplus_precision
+        self.precision["fiveyearemb_precision"] = fiveyearemb_precision
+        self.precision["visitemb_precision"] = visitemb_precision
 
     def computeRecall(self, k, mode):
-        pass
+        unique_phenotype = list(self.concept_phe.keys())
+        graphemb_recall = OrderedDict()
+        graphembplus_recall = OrderedDict()
+        fiveyearemb_recall = OrderedDict()
+        visitemb_recall = OrderedDict()
+
+        print("Compute recall for graphemb...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.graphemb_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_recall = compute_recall(candidate_concepts, k, self.similarity_matrix["graphemb_simmat"], 
+                                      self.simmat_dict["graphemb_simmat_dict"], mode)
+            else:
+                avg_recall = "NA"
+            graphemb_recall.update({phenotype : avg_recall})
+
+        print("Compute precision for graphembplus...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.graphembplus_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_recall = compute_recall(candidate_concepts, k, self.similarity_matrix["graphembplus_simmat"], 
+                                      self.simmat_dict["graphembplus_simmat_dict"], mode)
+            else:
+                avg_recall = "NA"
+            graphembplus_recall.update({phenotype : avg_recall})
+
+        print("Compute precision for fiveyearemb...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.fiveyearemb_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_recall = compute_recall(candidate_concepts, k, self.similarity_matrix["fiveyearemb_simmat"], 
+                                      self.simmat_dict["fiveyearemb_simmat_dict"], mode)
+            else:
+                avg_recall = "NA"
+            fiveyearemb_recall.update({phenotype : avg_recall})
+
+        print("Compute precision for visitemb...")
+        for phenotype in unique_phenotype:
+            candidate_concepts = self.visitemb_phedict[phenotype]
+            if len(candidate_concepts) > 1:
+                avg_recall = compute_recall(candidate_concepts, k, self.similarity_matrix["visitemb_simmat"], 
+                                      self.simmat_dict["visitemb_simmat_dict"], mode)
+            else:
+                avg_recall = "NA"
+            visitemb_recall.update({phenotype : avg_recall})
+
+        self.recall["graphemb_recall"] = graphemb_recall
+        self.recall["graphembplus_recall"] = graphembplus_recall
+        self.recall["fiveyearemb_recall"] = fiveyearemb_recall
+        self.recall["visitemb_recall"] = visitemb_recall
         
     def saveResults(self):
-        pass
+        recall_df = pd.DataFrame(self.recall)
+        precision_df = pd.DataFrame(self.precision)
+
+        recall_df.to_csv(os.path.join(self.config.save_dir, "recall.csv"))
+        precision_df.to_csv(os.path.join(self.config.save_dir, "precision.csv"))
 
 def set_config(json_file):
     """
@@ -195,4 +295,42 @@ def build_newdict(concept_list):
     for i in range(len(concept_list)):
         mydict[concept_list[i]] = i
     return mydict
+
+def compute_precision(candidate_list, k, sim_mat, simmat_dict, mode):
+    candidate_index = set()
+    candidate_num = k
+    for concept in candidate_list:
+        candidate_index.add(simmat_dict[concept])
+    
+    if mode == "percent":
+        candidate_num = int(np.ceil(len(candidate_list) * (k / 100)))
+    
+    precision_list = []
+    for concept in candidate_list:
+        retrieved_concepts = set(np.argsort(sim_mat[simmat_dict[concept]])[(-(candidate_num)-1):-1])
+        relevants = len(candidate_index.intersection(retrieved_concepts))
+        precision_list.append(relevants)
+    
+    avg_precision = np.average(np.array(precision_list) / candidate_num)
+    
+    return avg_precision
+
+def compute_recall(candidate_list, k, sim_mat, simmat_dict, mode):
+    candidate_index = set()
+    candidate_num = k
+    for concept in candidate_list:
+        candidate_index.add(simmat_dict[concept])
+    
+    if mode == "percent":
+        candidate_num = int(np.ceil(len(candidate_list) * (k / 100)))
+    
+    recall_list = []
+    for concept in candidate_list:
+        retrieved_concepts = set(np.argsort(sim_mat[simmat_dict[concept]])[(-(candidate_num)-1):-1])
+        relevants = len(candidate_index.intersection(retrieved_concepts))
+        recall_list.append(relevants)
+    
+    avg_recall = np.average(np.array(recall_list) / len(candidate_list))
+    
+    return avg_recall
 
