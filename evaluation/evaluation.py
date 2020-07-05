@@ -13,7 +13,7 @@ from scipy.spatial.distance import cosine
 import os
 
 class EvaluateMCE(object):
-    """Class for evaluation of MCEs"""
+    """Class for evaluating MCEs"""
     def __init__(self, json_dir):
         self.config = set_config(json_dir)
         
