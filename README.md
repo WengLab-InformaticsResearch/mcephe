@@ -16,11 +16,11 @@ We use [GloVe](https://nlp.stanford.edu/pubs/glove.pdf) and [node2vec](https://s
 2. Prepare dataset as a pickle file. GloVe takes a list of patient visits, where each visit of a patient contains multiple medical concepts, as an input. For example, [["concept A", "concept B"], ["Concept A", "Concept C", "Concept D"], ...]. No need to deliminate different patients since GloVe calculates co-occurrence based on a single visit. Concepts do not need to be encoded as integer. The GloVe package automatically encodes all existing unique codes in the training data and will output a mapping dictionary between concepts and corresponding integer codes.
 3. Start training 
 
-     python src/GloVe.py --input <"input path"> --output <"output path">
+       python src/GloVe.py --input <"input path"> --output <"output path">
     
     You can check descriptions of hyperparameters and default setting at help
 
-     python src/Glove.py --help
+       python src/Glove.py --help
 
 #### Learning Medical Concept Embedding using node2vec
 1. Install Python 3.5.2 and clone the [node2vec repository](https://github.com/aditya-grover/node2vec).
