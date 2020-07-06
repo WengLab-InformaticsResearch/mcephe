@@ -25,8 +25,8 @@ We use [GloVe](https://nlp.stanford.edu/pubs/glove.pdf) and [node2vec](https://s
 
 An example input format is provided at the node2vec repository. Note that if relationships have a direction, order of concepts must be aligned according to the direction. Concepts are required to be encoded as integers.
 3. Start training by using node2vec package:
+         python main.py --input <"path of input data"> --output <"path to save results">
 
-     python main.py --input <"path of input data"> --output <"path to save results">
 
 Detailed instruction is provided at the node2vec repository.
 
