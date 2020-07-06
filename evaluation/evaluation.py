@@ -336,9 +336,9 @@ def compute_recall(candidate_list, k, sim_mat, simmat_dict, mode):
     return avg_recall
 
 def parse_arguments(parser):
-    parser.add_argument("json_dir", type=str, help="The path of master json file")
-    parser.add_argument("k", type=int, help="k in Recall and Precision")
-    parser.add_argument("mode", type=str, choice=["num", "percent"], 
+    parser.add_argument("--input", type=str, help="The path of master json file")
+    parser.add_argument("--k", type=int, help="k in Recall and Precision")
+    parser.add_argument("--mode", type=str, choice=["num", "percent"], 
     help="percent or fixed number in calculation of Recall and Precision")
     return args
 
