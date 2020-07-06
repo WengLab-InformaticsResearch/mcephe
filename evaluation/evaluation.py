@@ -10,6 +10,7 @@ import gensim
 import tensorflow as tf
 from sklearn.metrics import pairwise_distances
 from scipy.spatial.distance import cosine
+import argparse
 import os
 
 class EvaluateMCE(object):
@@ -333,4 +334,22 @@ def compute_recall(candidate_list, k, sim_mat, simmat_dict, mode):
     avg_recall = np.average(np.array(recall_list) / len(candidate_list))
     
     return avg_recall
+
+def parse_arguments(parser):
+    parser.add_argument("json_dir", type=str, help="The path of master json file")
+    parser.add_argument("k", type=int, help="k in Recall and Precision")
+    parser.add_argument("mode", type=str, choice=["num", "percent"], 
+    help="percent or fixed number in calculation of Recall and Precision")
+    return args
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    args = parse_arguments(parser)
+
+    evaluation = EvaluateMCE(args.json_dir)
+    evaluation.setPheDict()
+    evaluation.buildSimilarityMatrix()
+    evaluation.computePrecision(args.k, args.mode)
+    evaluation.computeRecall(args.k, args.mode)
+    evaluation.saveResults()
 

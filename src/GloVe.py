@@ -6,15 +6,18 @@ import random
 import sys
 import os
 import pickle
+import argparse
 from collections import defaultdict
 
 class GloVe(tf.keras.Model):
-    def __init__(self, embedding_dim=256, max_vocab_size=100, scaling_factor=0.75, batch_size=512, learning_rate=0.01):
+    def __init__(self, embedding_dim=256, max_vocab_size=1000, scaling_factor=0.75, batch_size=512, num_epochs=50, learning_rate=0.01):
         super(GloVe, self).__init__()
         self.embedding_dim = embedding_dim
         self.max_vocab_size = max_vocab_size
         self.scaling_factor = scaling_factor
         self.batch_size = batch_size
+        self.num_epochs = num_epochs
+
         self.vocab_size = 0
         self.concept2id = None
         self.comap = None
@@ -110,12 +113,12 @@ class GloVe(tf.keras.Model):
                 self.embeddings)
         print("Embedding results have been saved")
 
-    def train_GloVe(self, num_epochs, save_dir):
+    def train_GloVe(self, save_dir):
         i_ids, j_ids, co_occurs = self.prepare_batch()
         total_batch = int(np.ceil(len(i_ids) / self.batch_size))
         cost_avg = tf.keras.metrics.Mean()
 
-        for epoch in range(num_epochs):
+        for epoch in range(self.num_epochs):
             progbar = tf.keras.utils.Progbar(len(i_ids))
             
             for i in range(total_batch):
@@ -134,3 +137,35 @@ class GloVe(tf.keras.Model):
                 self.epoch_loss_avg.append(avg_loss)
                     
         self.save_embeddings(save_dir, epoch, avg_loss)
+
+def open_patient_record(data_dir):
+    patient_record = []
+    with open(data_dir, "r") as f:
+        patients = f.read().split("\n")
+        for i in tqdm(range(len(patients))):
+            patient = patients[i]
+            patient_record.append(patient.split(","))
+    return patient_record
+
+def parse_arguments(parser):
+    parser.add_argument("data_dir", type=str, help="The path of training data")
+    parser.add_argument("saving_dir", type=str, help="The path to save results")
+    parser.add_argument("--dim", type=int, default=200, help="The dimension of embeddings")
+    parser.add_argument("--max_vocab", type=int, default=1000, help="The maximum vocabulary size")
+    parser.add_argument("--scaling_factor", type=float, default=0.75, help="The scaling factor")
+    parser.add_argument("--batch_size", type=int, default=512000, help="Training batch size")
+    parser.add_argument("--num_epochs", type=int, default=50, help="Training epochs")
+    parser.add_argument("--learning_rate", type=float, default=0.01, help="Learning rate for Adagrad optimizer")
+    return args
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    args = parse_arguments(parser)
+
+    training_data = open_patient_record(args.data_dir)
+    GloVe_model = GloVe(args.dim, args.max_vocab, args.scaling_factor, args.batch_size, args.num_epochs, args.learning_rate)
+    GloVe_model.build_dict(training_data)
+    GloVe_model.fit_to_corpus(training_data)
+    GloVe_model.init_params()
+    GloVe_model.save_dict(args.saving_dir)
+    GloVe_model.train_GloVe(args.saving_dir)
