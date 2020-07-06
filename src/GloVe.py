@@ -148,8 +148,8 @@ def open_patient_record(data_dir):
     return patient_record
 
 def parse_arguments(parser):
-    parser.add_argument("data_dir", type=str, help="The path of training data")
-    parser.add_argument("saving_dir", type=str, help="The path to save results")
+    parser.add_argument("--input", type=str, help="The path of training data")
+    parser.add_argument("--output", type=str, help="The path to output results")
     parser.add_argument("--dim", type=int, default=200, help="The dimension of embeddings")
     parser.add_argument("--max_vocab", type=int, default=1000, help="The maximum vocabulary size")
     parser.add_argument("--scaling_factor", type=float, default=0.75, help="The scaling factor")
