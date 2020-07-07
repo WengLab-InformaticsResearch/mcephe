@@ -61,8 +61,7 @@ class GloVe(tf.keras.Model):
             target_bias = tf.nn.embedding_lookup([self.target_biases], x[0])
             context_bias = tf.nn.embedding_lookup([self.context_biases], x[1])
 
-            weight = tf.math.minimum(1.0, tf.math.pow(tf.math.truediv(x[2], tf.cast(self.max_vocab_size, dtype=tf.float32)),
-                                                         self.scaling_factor))
+            weight = tf.math.minimum(1.0, tf.math.pow(tf.math.truediv(x[2], tf.cast(self.max_vocab_size, dtype=tf.float32)), self.scaling_factor))
         
             emb_product = tf.math.reduce_sum(tf.math.multiply(target_emb, context_emb), axis=1)
             log_cooccurrence = tf.math.log(tf.add(tf.cast(x[2], dtype=tf.float32), 1))

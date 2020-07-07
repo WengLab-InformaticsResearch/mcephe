@@ -266,8 +266,8 @@ class EvaluateMCE(object):
         recall_df = pd.DataFrame(self.recall)
         precision_df = pd.DataFrame(self.precision)
 
-        recall_df.to_csv(os.path.join(self.config.save_dir, "recall.csv"))
-        precision_df.to_csv(os.path.join(self.config.save_dir, "precision.csv"))
+        recall_df.to_csv(os.path.join(self.config.path.save_dir, "recall.csv"))
+        precision_df.to_csv(os.path.join(self.config.path.save_dir, "precision.csv"))
 
 def set_config(json_file):
     """
