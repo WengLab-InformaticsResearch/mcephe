@@ -163,6 +163,7 @@ def parse_arguments(parser):
     parser.add_argument("--batch_size", type=int, default=512000, help="Training batch size")
     parser.add_argument("--num_epochs", type=int, default=50, help="Training epochs")
     parser.add_argument("--learning_rate", type=float, default=0.01, help="Learning rate for Adagrad optimizer")
+    args = parser.parse_args()
     return args
 
 if __name__ == "__main__":

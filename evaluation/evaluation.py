@@ -340,6 +340,7 @@ def parse_arguments(parser):
     parser.add_argument("--k", type=int, help="k in Recall and Precision")
     parser.add_argument("--mode", type=str, choice=["num", "percent"], 
     help="percent or fixed number in calculation of Recall and Precision")
+    args = parser.parse_args()
     return args
 
 if __name__ == "__main__":
