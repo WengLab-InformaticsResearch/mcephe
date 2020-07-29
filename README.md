@@ -1,6 +1,6 @@
 ## Introduction
 
-This repository has source codes for learning and evaluating medical concept embeddings (MCEs) in the following [paper](https://scholar.google.com/citations?user=iSx6QrwAAAAJ&hl=en&oi=ao):
+This repository has source codes for learning and evaluating medical concept embeddings (MCEs) in the following [paper](https://www.medrxiv.org/content/medrxiv/early/2020/07/17/2020.07.14.20151274.full.pdf):
 
     Comparative Effectiveness of Knowledge Graphs- and EHR Data-Based Medical Concept Embedding for Phenotyping
         Junghwan Lee*, Cong Liu*, Jae Hyun Kim, Alex Butler, Ning Shang,
