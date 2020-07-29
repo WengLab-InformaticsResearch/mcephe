@@ -1,8 +1,8 @@
 ## Medcal Concept Embedding for Feature Engineering in Phenotyping
 
-This repository includes source codes for learning and evaluating medical concept embeddings (MCEs) in the following [paper](https://scholar.google.com/citations?user=iSx6QrwAAAAJ&hl=en&oi=ao):
+This repository has source codes for learning and evaluating medical concept embeddings (MCEs) in the following [paper](https://scholar.google.com/citations?user=iSx6QrwAAAAJ&hl=en&oi=ao):
 
-    Medical Concept Embedding for Feature Engineering in Phenotyping 
+    Comparative Effectiveness of Knowledge Graphs- and EHR Data-Based Medical Concept Embedding for Phenotyping
         Junghwan Lee*, Cong Liu*, Jae Hyun Kim, Alex Butler, Ning Shang,
         Chao Pang, Karthik Natarajan, Parick Ryan, Casey Ta, Chunhua Weng
         Preprint
