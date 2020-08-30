@@ -101,18 +101,18 @@ def compute_cost(model, i_ids, j_ids, co_occurrence, use_gpu=True):
     return tf.math.reduce_sum(tf.multiply(weight, distance_cost))
 
 def build_comatrix(records, concept2id):
+    """visit co-occurrence matrix based on a visit"""
     comatrix = np.zeros((len(concept2id), len(concept2id)), dtype=np.float32)
     
     percent_count = 0
-    for idx, patient in enumerate(records):
+    for idx, visit in enumerate(records):
         if idx % np.ceil(len(records)/20) == 0:
             print("{} percent done".format(percent_count * 5))
             percent_count += 1
-        for record in patient:
-            for p in record:
-                for k in record:
-                    if p != k:
-                        comatrix[p, k] += 1.
+        for p in visit:
+            for k in visit:
+                if p != k:
+                    comatrix[p, k] += 1.
     return comatrix
 
 def prepare_trainingset(comatrix):
