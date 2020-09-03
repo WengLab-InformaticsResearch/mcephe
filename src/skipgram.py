@@ -14,7 +14,8 @@ class SkipGram(tf.keras.Model):
 
     def initEmbedding(self):
         print("initialize model...")
-        self.embedding = tf.Variable(tf.random.normal([self.vocab_size, self.embedding_dim], 0, 0.01))
+        self.target_embedding = tf.Variable(tf.random.normal([self.vocab_size, self.embedding_dim], 0, 0.01))
+        self.context_embedding = tf.Variable(tf.random.normal([self.vocab_size, self.embedding_dim], 0, 0.01))
 
 def train_skipgram(output_path, patient_record_path, concept2id_path, epochs, batch_size, learning_rate=0.001, embedding_dim=128):
 
@@ -52,13 +53,13 @@ def train_skipgram(output_path, patient_record_path, concept2id_path, epochs, ba
 
     print("save trained embeddings...")
     np.save(os.path.join(output_path, 
-    "skipgram_embeddings_e{}_loss{:.4f}.npy".format(epochs, np.mean(cost_record))), skipgram.embedding.numpy()) 
+    "skipgram_embeddings_e{}_loss{:.4f}.npy".format(epochs, np.mean(cost_record))), skipgram.target_embedding.numpy()) 
 
 def computeEmbCost(model, i_vec, j_vec): 
     logEps = tf.constant(1e-8)
-    norms = tf.reduce_sum(tf.math.exp(tf.matmul(model.embedding, model.embedding, transpose_b=True)), axis=1)
-    denoms = tf.math.exp(tf.reduce_sum(tf.multiply(tf.nn.embedding_lookup(model.embedding, i_vec), 
-        tf.nn.embedding_lookup(model.embedding, j_vec)), axis=1))
+    norms = tf.reduce_sum(tf.math.exp(tf.matmul(model.target_embedding, model.context_embedding, transpose_b=True)), axis=1)
+    denoms = tf.math.exp(tf.reduce_sum(tf.multiply(tf.nn.embedding_lookup(model.target_embedding, i_vec), 
+        tf.nn.embedding_lookup(model.context_embedding, j_vec)), axis=1))
     concept_cost = tf.negative(tf.math.log((tf.divide(denoms, tf.gather(norms, i_vec)) + logEps)))
     return tf.math.reduce_mean(concept_cost)
 
