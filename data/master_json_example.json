@@ -1,9 +1,0 @@
-{"path" : {"save_dir" : "./data"},
-"hparams" : {"emb_dim" : 256},
-"results" : {"concept2id_fiveyearemb" : "./results/concept2id_fiveyearemb.pkl",
-    "concept2id_visitemb" : "./results/concept2id_visitemb.pkl",
-    "fiveyearemb" : "./results/fiveyearemb.npy",
-    "visitemb" : "./results/visitemb.npy",
-    "graphemb" : "./results/graphemb.emb",
-    "graphembplus" : "./results/graphembplus.emb"},
-"data" : {"phe_dict" : "./data/concepts_phenotypes.pkl"}}
