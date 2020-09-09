@@ -59,15 +59,12 @@ def computeEmbCost(model, i_vec, j_vec):
 
     uv = tf.matmul(model.target_embedding, model.context_embedding, transpose_b=True)
     uv_max = tf.math.reduce_max(uv, axis=1)
-    uv_gather = tf.gather(uv, i_vec)
-    uv_max_gather = tf.gather(uv_max, i_vec)
-    denoms = tf.subtract(uv_gather, tf.tile(tf.reshape(uv_max_gather, [len(uv_max_gather), 1]), [1, uv_gather.shape[1]]))
-    denoms = tf.reduce_sum(tf.math.exp(denoms), axis=1)
+    denoms = tf.reduce_sum(tf.math.exp(tf.subtract(uv, tf.reshape(uv_max, [len(uv_max), 1]))), axis=1)
 
     ij = tf.reduce_sum(tf.multiply(tf.nn.embedding_lookup(model.target_embedding, i_vec), tf.nn.embedding_lookup(model.context_embedding, j_vec)), axis=1)
-    noms = tf.subtract(ij, uv_max_gather)
+    noms = tf.subtract(ij, tf.gather(uv_max, i_vec) )
     noms = tf.math.exp(noms)
-    return tf.reduce_mean(tf.negative(tf.math.log(tf.divide(noms, denoms))))
+    return tf.reduce_mean(tf.negative(tf.math.log(tf.divide(noms, tf.gather(denoms,i_vec)))))
 
 def prepare_batch(record):
     i_vec = []
