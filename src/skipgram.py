@@ -56,12 +56,18 @@ def train_skipgram(output_path, patient_record_path, concept2id_path, epochs, ba
     "skipgram_embeddings_e{}_loss{:.4f}.npy".format(epochs, np.mean(cost_record))), skipgram.target_embedding.numpy()) 
 
 def computeEmbCost(model, i_vec, j_vec): 
-    logEps = tf.constant(1e-8)
-    norms = tf.reduce_sum(tf.math.exp(tf.matmul(model.target_embedding, model.context_embedding, transpose_b=True)), axis=1)
-    denoms = tf.math.exp(tf.reduce_sum(tf.multiply(tf.nn.embedding_lookup(model.target_embedding, i_vec), 
-        tf.nn.embedding_lookup(model.context_embedding, j_vec)), axis=1))
-    concept_cost = tf.negative(tf.math.log((tf.divide(denoms, tf.gather(norms, i_vec)) + logEps)))
-    return tf.math.reduce_mean(concept_cost)
+
+    uv = tf.matmul(model.target_embedding, model.context_embedding, transpose_b=True)
+    uv_max = tf.math.reduce_max(uv, axis=1)
+    uv_gather = tf.gather(uv, i_vec)
+    uv_max_gather = tf.gather(uv_max, i_vec)
+    denoms = tf.subtract(uv_gather, tf.tile(tf.reshape(uv_max_gather, [len(uv_max_gather), 1]), [1, uv_gather.shape[1]]))
+    denoms = tf.reduce_sum(tf.math.exp(denoms), axis=1)
+
+    ij = tf.reduce_sum(tf.multiply(tf.nn.embedding_lookup(model.target_embedding, i_vec), tf.nn.embedding_lookup(model.context_embedding, j_vec)), axis=1)
+    noms = tf.subtract(ij, uv_max_gather)
+    noms = tf.math.exp(noms)
+    return tf.reduce_mean(tf.negative(tf.math.log(tf.divide(noms, denoms))))
 
 def prepare_batch(record):
     i_vec = []
