@@ -10,7 +10,7 @@ This repository has source codes for learning medical concept embeddings (MCEs) 
 
 ### Learning Medical Concept Embeddings
 We use [GloVe](https://nlp.stanford.edu/pubs/glove.pdf), [skip-gram](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf), [node2vec](https://snap.stanford.edu/node2vec/), 
-[LINE](https://dl.acm.org/doi/abs/10.1145/2736277.2741093?casa_token=Z-RxSgBYo_wAAAAA:pHIx3Cvk9BjV6pIPCXg4UXhA2iFFBaP7TjDRkswkcHY4apy8bIVKmrPa5hMO9HW9gPlzUMcgisnn6-0), and singular value decomposition (SVD) for learning MCEs. For implementation of node2vec and LINE, we used [OpenNE](https://github.com/thunlp/OpenNE), which is an open source python toolkit for network embedding. For implementation of singular value decomposition, we used [SciPy](https://www.scipy.org/).
+[LINE](https://dl.acm.org/doi/abs/10.1145/2736277.2741093?casa_token=Z-RxSgBYo_wAAAAA:pHIx3Cvk9BjV6pIPCXg4UXhA2iFFBaP7TjDRkswkcHY4apy8bIVKmrPa5hMO9HW9gPlzUMcgisnn6-0), and singular value decomposition (SVD) for learning MCEs. For implementation of node2vec and LINE, we used [OpenNE](https://github.com/thunlp/OpenNE), which is an open source python toolkit for network embedding. For implementation of singular value decomposition, we used [SciPy](https://www.scipy.org/). The source code in this repository is to implement GloVe and skip-gram. 
 
 #### Preparing Dataset
 Dataset should be prepared as two pickle files, encoded windowed-EHR and the dictionary for encoded medical concepts in the EHR. Example formats of the data are provided in data/.
