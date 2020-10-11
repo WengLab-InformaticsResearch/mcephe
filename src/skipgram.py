@@ -95,7 +95,7 @@ def parse_arguments(parser):
     parser.add_argument("--input_concept2id", type=str, help="The path of training data: concept2id")
     parser.add_argument("--output", type=str, help="The path to output results")
     parser.add_argument("--dim", type=int, default=128, help="The dimension of embeddings")
-    parser.add_argument("--batch_size", type=int, default=51200, help="Training batch size")
+    parser.add_argument("--batch_size", type=int, default=128, help="Training batch size")
     parser.add_argument("--num_epochs", type=int, default=30, help="Training epochs")
     parser.add_argument("--learning_rate", type=float, default=0.01, help="Learning rate for Adagrad optimizer")
     args = parser.parse_args()

@@ -1,0 +1,1 @@
+{0 : "Fever", 1 : "Cough", 2 : "Acute respiratory disease"}
